@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Fire Base Tet</title>
+
+    <script type="text/javascript" src="scripts/firebase.js"></script>
+    <script type="text/javascript" src="scripts/angular.js"></script>
+    <script type="text/javascript" src="scripts/angularfire.min.js"></script>
+
+
+<!--<script>
+    var dataRef = new Firebase('https://blazing-fire-4474.firebaseio.com/');
+    dataRef.set("I am now writing data into Firebase!");
+    </script>-->
+
+    <script>
+    var myApp = angular.module("MyApp", ["firebase"]);
+
+  
+    function MyController($scope, $firebase) {
+        var peopleRef = new Firebase("https://blazing-fire-4474.firebaseio.com/people");
+        $scope.people = $firebase(peopleRef);
+        $scope.addPerson = function () {
+            // AngularFire $add method
+            $scope.people.$add($scope.newPerson);
+            //or add a new person manually
+            //peopleRef.update({ name: 'Alex', age: 35 });
+
+            $scope.newPerson = "";
+        }
+
+        $scope.deletePerson = function (person) {
+
+            $scope.people.$remove(person.person.$key);
+            
+        }
+    }
+    </script>
+</head>
+<body ng-app="MyApp">
+    <div ng-controller="MyController">
+        <ul ng-repeat="person in people">
+            <li>{{person}} - {{person.name}} - {{ person.age}} <a href="#" ng-click="deletePerson(this)">Delete</a></li>
+        </ul>
+        <input type="text" ng-model="newPerson" />
+        <button type="submit" ng-click="addPerson()">Add New Person</button>
+    </div>
+</body>
+</html>
